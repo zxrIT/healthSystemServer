@@ -1,0 +1,41 @@
+server:
+  port: 8010
+spring:
+  datasource:
+    dynamic:
+      primary: master
+      strict: false
+      datasource:
+        master:
+          username: zxr
+          password: "root1234"
+          initial-size: 1
+          min-idle: 1
+          max-active: 20
+          test-on-borrow: true
+          url: jdbc:mysql://192.168.202.136/health?characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
+          driver-class-name: com.mysql.cj.jdbc.Driver
+        from_1:
+          username: zxr
+          password: "Root1234!"
+          initial-size: 1
+          min-idle: 1
+          max-active: 20
+          test-on-borrow: true
+          url: jdbc:mysql://192.168.202.137/health?characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
+          driver-class-name: com.mysql.cj.jdbc.Driver
+        from_2:
+          username: zxr
+          password: "root1234"
+          initial-size: 1
+          min-idle: 1
+          max-active: 20
+          test-on-borrow: true
+          url: jdbc:mysql://192.168.202.138/health?characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
+          driver-class-name: com.mysql.cj.jdbc.Driver
+  application:
+    name: BookKeepingProvider
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
