@@ -1,6 +1,16 @@
 server:
   port: 8010
 spring:
+  redis:
+    host: 192.168.202.134
+    port: 6379
+    password: root1234
+    lettuce:
+      pool:
+        max-active: 8
+        max-idle: 8
+        min-idle: 0
+        max-wait: 100
   datasource:
     dynamic:
       primary: master

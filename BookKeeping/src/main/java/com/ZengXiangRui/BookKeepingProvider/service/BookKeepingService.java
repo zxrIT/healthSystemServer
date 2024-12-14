@@ -9,4 +9,6 @@ public interface BookKeepingService extends IService<BookKeepingBill> {
     String createBookKeeping(BookKeepingBill bookKeepingBill);
 
     String updateBookKeeping(BookKeepingBill bookKeepingBill);
+
+    String deleteBookKeeping(BookKeepingBill bookKeepingBill);
 }

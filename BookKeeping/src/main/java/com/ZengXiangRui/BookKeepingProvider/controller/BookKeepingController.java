@@ -26,4 +26,9 @@ public class BookKeepingController {
     public String updateBookKeeping(@RequestBody BookKeepingBill bookKeepingBill) {
         return bookKeepingService.updateBookKeeping(bookKeepingBill);
     }
+
+    @DeleteMapping("/deleteBookKeeping")
+    public String deleteBookKeeping(@RequestBody BookKeepingBill bookKeepingBill) {
+        return bookKeepingService.deleteBookKeeping(bookKeepingBill);
+    }
 }
