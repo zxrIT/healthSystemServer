@@ -1,0 +1,28 @@
+server:
+  port: 10000
+spring:
+  application:
+    name: Gateway
+  cloud:
+    discovery:
+      nacos:
+        server-addr: localhost:8848
+    gateway:
+      globalcors:
+        add-to-simple-url-handler-mapping: true
+        cors-configurations:
+          '[/**]':
+            allowedMethods: "*"
+            allowedOrigins: "*"
+            allowedHeaders: "*"
+            allowCredentials: true
+            maxAge: 360000
+      routes:
+        - id: BookKeepingProvider
+          uri: lb://BookKeepingProvider
+          predicates:
+            - Path=/book/keeping/**
+        - id: UploadProvider
+          uri: lb://UploadProvider
+          predicates:
+            - Path=/upload/**

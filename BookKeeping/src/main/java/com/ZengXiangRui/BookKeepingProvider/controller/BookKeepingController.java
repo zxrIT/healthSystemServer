@@ -27,8 +27,8 @@ public class BookKeepingController {
         return bookKeepingService.updateBookKeeping(bookKeepingBill);
     }
 
-    @DeleteMapping("/deleteBookKeeping")
-    public String deleteBookKeeping(@RequestBody BookKeepingBill bookKeepingBill) {
-        return bookKeepingService.deleteBookKeeping(bookKeepingBill);
+    @DeleteMapping("/deleteBookKeeping/{id}")
+    public String deleteBookKeeping(@PathVariable String id) {
+        return bookKeepingService.deleteBookKeeping(id);
     }
 }

@@ -1,6 +1,12 @@
 server:
   port: 8010
 spring:
+  abbitmq:
+    host: 127.0.0.1
+    port: 5672
+    username: guest
+    password: guest
+    virtual-host: /
   redis:
     host: 192.168.202.134
     port: 6379
@@ -49,3 +55,6 @@ spring:
     nacos:
       discovery:
         server-addr: 127.0.0.1:8848
+logging:
+  level:
+    com.ZengXiangRui: info

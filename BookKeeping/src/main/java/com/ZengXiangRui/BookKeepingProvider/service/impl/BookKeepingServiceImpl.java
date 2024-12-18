@@ -18,6 +18,8 @@ import com.baomidou.dynamic.datasource.annotation.DSTransactional;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
@@ -27,11 +29,15 @@ import java.util.concurrent.TimeUnit;
 
 @Service
 @SuppressWarnings("all")
+@Slf4j
 public class BookKeepingServiceImpl extends ServiceImpl<BookKeepingBillMapper, BookKeepingBill>
         implements BookKeepingService {
 
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
+
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
 
     @Autowired
     BookKeepingBillMapper bookKeepingBillMapper;
@@ -48,7 +54,7 @@ public class BookKeepingServiceImpl extends ServiceImpl<BookKeepingBillMapper, B
         String redisCaching = stringRedisTemplate.opsForValue().get(redisCachingKey);
         if (!IsEmpty.isJsonEmpty(redisCaching)) {
             bookKeepingBills = (Page<BookKeepingBill>) JsonUtil.jsonToObject(redisCaching, Page.class);
-            System.out.println("redis Caching hit");
+            log.info("redis Caching hit");
             return new JsonSerialization().toJson(new BookKeepingBillsResponse<Page<BookKeepingBill>>(
                     BaseResponseUtil.SUCCESS_CODE, BaseResponseUtil.SUCCESS_MESSAGE, bookKeepingBills
             ));
@@ -131,10 +137,10 @@ public class BookKeepingServiceImpl extends ServiceImpl<BookKeepingBillMapper, B
     @DS("master")
     @DSTransactional
     @LoggerAnnotation(operation = "删除账单", dataSource = "master")
-    public String deleteBookKeeping(BookKeepingBill bookKeepingBill) throws RequestParametersException {
+    public String deleteBookKeeping(String id) throws RequestParametersException {
         BookKeepingBill bookKeepingBillDataBase = bookKeepingBillMapper.selectOne(
                 new LambdaQueryWrapper<BookKeepingBill>().eq(
-                        BookKeepingBill::getId, bookKeepingBill.getId()
+                        BookKeepingBill::getId, id
                 ));
         if (bookKeepingBillDataBase == null) {
             throw new RequestParametersException("要删除的对象不存在");

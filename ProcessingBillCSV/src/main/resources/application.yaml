@@ -1,0 +1,20 @@
+server:
+  port: 8030
+spring:
+  rabbitmq:
+    host: 127.0.0.1
+    port: 5672
+    username: guest
+    password: guest
+    virtual-host: /
+    connection-timeout: 200ms
+    template:
+      retry:
+        enabled: true
+        multiplier: 1
+  application:
+    name: ProcessingBillCSVProvider
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848

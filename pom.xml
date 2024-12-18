@@ -11,6 +11,9 @@
     <modules>
         <module>Common</module>
         <module>BookKeeping</module>
+        <module>Gateway</module>
+        <module>Upload</module>
+        <module>ProcessingBillCSV</module>
     </modules>
 
     <properties>
