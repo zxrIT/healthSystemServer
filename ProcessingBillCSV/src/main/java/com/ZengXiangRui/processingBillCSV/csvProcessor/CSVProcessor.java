@@ -17,7 +17,7 @@ public class CSVProcessor {
 
     private static final int titleLine = 25;
 
-    public static List<CSVLineObject> csvHandler(String filePath) throws CSVProcessingException {
+    public static List<CSVLineObject> csvHandlerAli(String filePath) throws CSVProcessingException {
         List<CSVLineObject> csvLineObjectList = new ArrayList<>();
         try {
             InputStream inputStream = new FileInputStream(filePath);

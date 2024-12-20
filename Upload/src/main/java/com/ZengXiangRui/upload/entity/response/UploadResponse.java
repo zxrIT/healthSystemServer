@@ -1,4 +1,4 @@
-package com.ZengXiangRui.upload.response;
+package com.ZengXiangRui.upload.entity.response;
 
 import com.ZengXiangRui.Common.Response.BaseResponse;
 

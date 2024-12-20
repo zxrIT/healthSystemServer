@@ -1,0 +1,15 @@
+server:
+  port: 8040
+spring:
+  application:
+    name: WebSocketProvider
+  rabbitmq:
+    host: 127.0.0.1
+    port: 5672
+    username: guest
+    password: guest
+    virtual-host: /
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848

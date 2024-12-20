@@ -62,7 +62,7 @@ public class BookKeepingServiceImpl extends ServiceImpl<BookKeepingBillMapper, B
         try {
             bookKeepingBills = bookKeepingBillMapper.selectPage(
                     new Page<>(page, quantity),
-                    new LambdaQueryWrapper<BookKeepingBill>()
+                    new LambdaQueryWrapper<BookKeepingBill>().orderByDesc(BookKeepingBill::getTradingHours)
             );
             stringRedisTemplate.opsForValue().set(
                     redisCachingKey, JsonUtil.objectToJson(bookKeepingBills),
