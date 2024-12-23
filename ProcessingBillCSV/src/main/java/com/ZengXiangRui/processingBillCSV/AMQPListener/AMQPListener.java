@@ -20,14 +20,13 @@ public class AMQPListener {
 
     @RabbitListener(queues = "zxr.health")
     public void listenerSimpleQueue(BatchCreateAMQPResult<String> batchCreateAMQPResultMessage) {
-        System.out.println(batchCreateAMQPResultMessage.getData());
-        System.out.println(batchCreateAMQPResultMessage.getId());
         String batchUniqueId = batchCreateAMQPResultMessage.getId();
         BatchCreateAMQPResult<List<CSVLineObject>> batchCreateAMQPResultToDataBase = new BatchCreateAMQPResult<>();
         BatchPayloadAMQPResult<Boolean> batchCreateAMQPResultStatus = new BatchPayloadAMQPResult<Boolean>();
         batchCreateAMQPResultStatus.setPayload("processor");
         try {
-            List<CSVLineObject> csvLineObjectList = CSVProcessor.csvHandlerAli(batchCreateAMQPResultMessage.getData());
+            List<CSVLineObject> csvLineObjectList = CSVProcessor.csvHandlerAli(batchCreateAMQPResultMessage.getData()
+                    , batchCreateAMQPResultMessage.getUserId());
             batchCreateAMQPResultToDataBase.setId(batchUniqueId);
             batchCreateAMQPResultToDataBase.setData(csvLineObjectList);
             rabbitTemplate.convertAndSend("zxr.health.batch.create", "", batchCreateAMQPResultToDataBase);

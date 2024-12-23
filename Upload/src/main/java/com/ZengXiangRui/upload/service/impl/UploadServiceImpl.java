@@ -4,6 +4,7 @@ import com.ZengXiangRui.Common.Entity.AMQP.BatchCreateAMQPResult;
 import com.ZengXiangRui.Common.Response.BaseResponseUtil;
 import com.ZengXiangRui.Common.Utils.ErrorLogger;
 import com.ZengXiangRui.Common.Utils.JsonSerialization;
+import com.ZengXiangRui.Common.Utils.UserContext;
 import com.ZengXiangRui.Common.annotation.LoggerAnnotation;
 import com.ZengXiangRui.Common.exception.util.UploadFailedException;
 import com.ZengXiangRui.upload.aliyun.AliyunOSSProvider;
@@ -40,6 +41,7 @@ public class UploadServiceImpl implements UploadService {
             aliyunOSSProvider.aliyunUpdate(fileName);
             BatchCreateAMQPResult<String> batchCreateAMQPResult = new BatchCreateAMQPResult<>();
             batchCreateAMQPResult.setId(randomUUIDString.toString());
+            batchCreateAMQPResult.setUserId(UserContext.getUserId());
             batchCreateAMQPResult.setData("/Users/zengxiangrui/HealthSystem/static/csv/" + fileName);
             rabbitTemplate.convertAndSend("zxr.HealthExchange.ali.csv", "", batchCreateAMQPResult);
         } catch (Exception exception) {

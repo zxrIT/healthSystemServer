@@ -1,6 +1,7 @@
 package com.ZengXiangRui.processingBillCSV.csvProcessor;
 
 import com.ZengXiangRui.Common.Utils.Encryption;
+import com.ZengXiangRui.Common.Utils.UserContext;
 import com.ZengXiangRui.Common.exception.util.CSVProcessingException;
 import com.ZengXiangRui.processingBillCSV.entity.CSVLineObject;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -17,7 +18,7 @@ public class CSVProcessor {
 
     private static final int titleLine = 25;
 
-    public static List<CSVLineObject> csvHandlerAli(String filePath) throws CSVProcessingException {
+    public static List<CSVLineObject> csvHandlerAli(String filePath, String userId) throws CSVProcessingException {
         List<CSVLineObject> csvLineObjectList = new ArrayList<>();
         try {
             InputStream inputStream = new FileInputStream(filePath);
@@ -48,6 +49,7 @@ public class CSVProcessor {
                         rowNow.getCell(11) == null ? "" : rowNow.getCell(7).getStringCellValue()
                 );
                 csvLineObject.setId(Encryption.encryptToMd5(csvLineObject.getTradeOrderNumber()));
+                csvLineObject.setUserId(userId);
                 csvLineObjectList.add(csvLineObject);
             }
             inputStream.close();

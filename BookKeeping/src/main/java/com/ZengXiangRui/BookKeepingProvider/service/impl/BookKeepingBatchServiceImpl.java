@@ -5,7 +5,6 @@ import com.ZengXiangRui.BookKeepingProvider.mapper.BookKeepingBillMapper;
 import com.ZengXiangRui.BookKeepingProvider.service.BookKeepingBatchService;
 import com.ZengXiangRui.Common.Utils.ErrorLogger;
 import com.ZengXiangRui.Common.annotation.LoggerAnnotation;
-import com.ZengXiangRui.Common.exception.util.DataBaseException;
 import com.baomidou.dynamic.datasource.annotation.DS;
 import com.baomidou.dynamic.datasource.annotation.DSTransactional;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;

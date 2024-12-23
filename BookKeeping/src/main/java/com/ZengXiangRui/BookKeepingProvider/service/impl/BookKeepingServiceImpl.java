@@ -5,10 +5,7 @@ import com.ZengXiangRui.BookKeepingProvider.mapper.BookKeepingBillMapper;
 import com.ZengXiangRui.BookKeepingProvider.response.BookKeepingBillsResponse;
 import com.ZengXiangRui.BookKeepingProvider.service.BookKeepingService;
 import com.ZengXiangRui.Common.Response.BaseResponseUtil;
-import com.ZengXiangRui.Common.Utils.Encryption;
-import com.ZengXiangRui.Common.Utils.IsEmpty;
-import com.ZengXiangRui.Common.Utils.JsonSerialization;
-import com.ZengXiangRui.Common.Utils.JsonUtil;
+import com.ZengXiangRui.Common.Utils.*;
 import com.ZengXiangRui.Common.annotation.LoggerAnnotation;
 import com.ZengXiangRui.Common.exception.util.DataBaseException;
 import com.ZengXiangRui.Common.exception.util.RequestParametersException;
@@ -63,6 +60,7 @@ public class BookKeepingServiceImpl extends ServiceImpl<BookKeepingBillMapper, B
             bookKeepingBills = bookKeepingBillMapper.selectPage(
                     new Page<>(page, quantity),
                     new LambdaQueryWrapper<BookKeepingBill>().orderByDesc(BookKeepingBill::getTradingHours)
+                            .eq(BookKeepingBill::getUserId, UserContext.getUserId())
             );
             stringRedisTemplate.opsForValue().set(
                     redisCachingKey, JsonUtil.objectToJson(bookKeepingBills),
@@ -99,6 +97,7 @@ public class BookKeepingServiceImpl extends ServiceImpl<BookKeepingBillMapper, B
             bookKeepingBill.setCounterparty(bookKeepingDisplayBill.getCounterparty());
             bookKeepingBill.setProductDescription(bookKeepingDisplayBill.getProductDescription());
             bookKeepingBill.setTransactionStatus(bookKeepingDisplayBill.getTransactionStatus());
+            bookKeepingBill.setUserId(UserContext.getUserId());
             bookKeepingBillMapper.insert(bookKeepingBill);
             Set<String> keys = stringRedisTemplate.keys("book:keeping:*");
             stringRedisTemplate.delete(keys);
@@ -119,6 +118,7 @@ public class BookKeepingServiceImpl extends ServiceImpl<BookKeepingBillMapper, B
             throw new RequestParametersException("参数规格不正确");
         }
         try {
+            bookKeepingDisplayBill.setUserId(UserContext.getUserId());
             bookKeepingBillMapper.update(bookKeepingDisplayBill,
                     new LambdaQueryWrapper<BookKeepingBill>().eq(
                             BookKeepingBill::getId, bookKeepingDisplayBill.getId())

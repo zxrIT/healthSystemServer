@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/authentication")
-@CrossOrigin
 public class NotThirdPartyController {
     private final NotThirdPartyService notThirdPartyService;
 

@@ -1,6 +1,10 @@
 server:
   port: 10000
 spring:
+  redis:
+    host: 192.168.202.134
+    port: 6379
+    password: root1234
   application:
     name: Gateway
   cloud:
@@ -26,3 +30,11 @@ spring:
           uri: lb://UploadProvider
           predicates:
             - Path=/upload/**
+        - id: AuthenticationProvider
+          uri: lb://AuthenticationProvider
+          predicates:
+            - Path=/authentication/**
+health:
+  auth:
+    excludePaths:
+      - /authentication/**

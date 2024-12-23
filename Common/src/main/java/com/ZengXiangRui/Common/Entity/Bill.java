@@ -40,4 +40,7 @@ public class Bill {
 
     @TableField("tradingHours")
     private Date tradingHours;
+
+    @TableField("userId")
+    private String userId;
 }
