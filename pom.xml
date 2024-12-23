@@ -15,6 +15,7 @@
         <module>Upload</module>
         <module>ProcessingBillCSV</module>
         <module>WebSocket</module>
+        <module>Authentication</module>
     </modules>
 
     <properties>

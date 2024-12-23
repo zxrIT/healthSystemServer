@@ -1,0 +1,20 @@
+server:
+  port: 8888
+spring:
+  redis:
+    host: 192.168.202.134
+    port: 6379
+    password: root1234
+  datasource:
+    username: root
+    password: "root1234"
+    url: jdbc:mysql://127.0.0.1:3306/health?characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  application:
+    name: AuthenticationProvider
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
+token:
+  securitySecretKey: zxr-health

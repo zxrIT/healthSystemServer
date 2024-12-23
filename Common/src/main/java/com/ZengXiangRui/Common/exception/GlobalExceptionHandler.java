@@ -4,7 +4,6 @@ import com.ZengXiangRui.Common.Response.BaseResponse;
 import com.ZengXiangRui.Common.Response.BaseResponseUtil;
 import com.ZengXiangRui.Common.Response.upload.UploadResponseData;
 import com.ZengXiangRui.Common.Utils.JsonSerialization;
-import com.ZengXiangRui.Common.exception.util.ForbiddenException;
 import com.ZengXiangRui.Common.exception.util.RequestParametersException;
 import com.ZengXiangRui.Common.exception.util.UploadFailedException;
 import org.slf4j.Logger;
@@ -20,12 +19,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value = Exception.class)
     @ResponseBody
     public String exceptionHandler(Exception exception) {
-        if (exception instanceof ForbiddenException) {
-            return JsonSerialization.toJson(new BaseResponse<>(
-                    BaseResponseUtil.FORBIDDEN_CODE, BaseResponseUtil.FORBIDDEN_MESSAGE,
-                    "认证失败，请重新登录"
-            ));
-        } else if (exception instanceof RequestParametersException) {
+        if (exception instanceof RequestParametersException) {
             return JsonSerialization.toJson(new BaseResponse<>(
                     BaseResponseUtil.CLIENT_ERROR_CODE, BaseResponseUtil.CLIENT_ERROR_MESSAGE,
                     exception.getMessage()
