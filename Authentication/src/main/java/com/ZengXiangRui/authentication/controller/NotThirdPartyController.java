@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/authentication")
+@RequestMapping("/authentication/password")
 public class NotThirdPartyController {
     private final NotThirdPartyService notThirdPartyService;
 
@@ -15,7 +15,7 @@ public class NotThirdPartyController {
         this.notThirdPartyService = notThirdParty;
     }
 
-    @PostMapping("/password/login")
+    @PostMapping("/login")
     public String passwordLogin(@RequestBody PasswordLoginPayload passwordLoginPayload) {
         return notThirdPartyService.login(passwordLoginPayload.getUsername(), passwordLoginPayload.getPassword());
     }

@@ -11,6 +11,20 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class FanoutConfiguration {
+    @Bean
+    public FanoutExchange fanoutExchangeWeichat() {
+        return new FanoutExchange("zxr.HealthExchange.weichat.csv");
+    }
+
+    @Bean
+    public Queue fanoutQueueWeichat() {
+        return new Queue("zxr.Health.weichat");
+    }
+
+    @Bean
+    public Binding fanoutBindingWeichat() {
+        return BindingBuilder.bind(fanoutQueueWeichat()).to(fanoutExchangeWeichat());
+    }
 
     @Bean
     public FanoutExchange fanoutExchange() {

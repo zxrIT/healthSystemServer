@@ -32,20 +32,52 @@ public class UploadServiceImpl implements UploadService {
     private AliyunOSSProvider aliyunOSSProvider;
 
     @Override
-    @LoggerAnnotation(operation = "上传本地csv", dataSource = "")
-    public String uploadCsv(MultipartFile uploadFile, String username, String userid, String notesOnBills) throws UploadFailedException {
+    @LoggerAnnotation(operation = "上传本地支付宝csv", dataSource = "")
+    public String uploadCsvAli(MultipartFile uploadFile, String username, String userid, String notesOnBills) throws UploadFailedException {
         UUID randomUUIDString = UUID.randomUUID();
         String fileName = username + "_" + userid + "_" + randomUUIDString + ".csv";
         try {
-            uploadFile.transferTo(new File("/Users/zengxiangrui/HealthSystem/static/csv/" + fileName));
-            aliyunOSSProvider.aliyunUpdate(fileName);
+            uploadFile.transferTo(new File("/Users/zengxiangrui/HealthSystem/static/csv/ali/" + fileName));
+            aliyunOSSProvider.aliyunUpdate(fileName, "ali");
             BatchCreateAMQPResult<String> batchCreateAMQPResult = new BatchCreateAMQPResult<>();
             batchCreateAMQPResult.setId(randomUUIDString.toString());
             batchCreateAMQPResult.setUserId(UserContext.getUserId());
-            batchCreateAMQPResult.setData("/Users/zengxiangrui/HealthSystem/static/csv/" + fileName);
+            batchCreateAMQPResult.setData("/Users/zengxiangrui/HealthSystem/static/csv/ali/" + fileName);
             rabbitTemplate.convertAndSend("zxr.HealthExchange.ali.csv", "", batchCreateAMQPResult);
         } catch (Exception exception) {
-            File file = new File("/Users/zengxiangrui/HealthSystem/static/csv/" + fileName);
+            File file = new File("/Users/zengxiangrui/HealthSystem/static/csv/ali/" + fileName);
+            if (file.exists()) {
+                file.delete();
+            }
+            try {
+                aliyunOSSProvider.aliyunDelete(fileName);
+            } catch (Exception exceptionAliyun) {
+                ErrorLogger.Log(UploadFailedException.class, exceptionAliyun.getMessage());
+            } finally {
+                throw new UploadFailedException(exception.getMessage());
+            }
+        }
+        return JsonSerialization.toJson(new UploadResponse<UploadResponseData>(
+                BaseResponseUtil.SUCCESS_CODE, BaseResponseUtil.SUCCESS_MESSAGE,
+                new UploadResponseData(randomUUIDString.toString(), "数据处理中......")
+        ));
+    }
+
+    @Override
+    @LoggerAnnotation(operation = "上传本地微信csv", dataSource = "")
+    public String uploadCsvWeichat(MultipartFile uploadFile, String username, String userid, String notesOnBills) {
+        UUID randomUUIDString = UUID.randomUUID();
+        String fileName = username + "_" + userid + "_" + randomUUIDString + ".csv";
+        try {
+            uploadFile.transferTo(new File("/Users/zengxiangrui/HealthSystem/static/csv/weichat/" + fileName));
+            aliyunOSSProvider.aliyunUpdate(fileName, "weichat");
+            BatchCreateAMQPResult<String> batchCreateAMQPResult = new BatchCreateAMQPResult<>();
+            batchCreateAMQPResult.setId(randomUUIDString.toString());
+            batchCreateAMQPResult.setUserId(UserContext.getUserId());
+            batchCreateAMQPResult.setData("/Users/zengxiangrui/HealthSystem/static/csv/weichat/" + fileName);
+            rabbitTemplate.convertAndSend("zxr.HealthExchange.weichat.csv", "", batchCreateAMQPResult);
+        } catch (Exception exception) {
+            File file = new File("/Users/zengxiangrui/HealthSystem/static/csv/weichat/" + fileName);
             if (file.exists()) {
                 file.delete();
             }

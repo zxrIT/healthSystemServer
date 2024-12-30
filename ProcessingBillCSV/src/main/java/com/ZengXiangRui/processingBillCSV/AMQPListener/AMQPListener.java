@@ -18,8 +18,32 @@ public class AMQPListener {
     @Autowired
     private RabbitTemplate rabbitTemplate;
 
+    @RabbitListener(queues = "zxr.Health.weichat")
+    public void listenerSimpleQueueWeichat(BatchCreateAMQPResult<String> batchCreateAMQPResultMessage) {
+        String batchUniqueId = batchCreateAMQPResultMessage.getId();
+        BatchCreateAMQPResult<List<CSVLineObject>> batchCreateAMQPResultToDataBase = new BatchCreateAMQPResult<>();
+        BatchPayloadAMQPResult<Boolean> batchCreateAMQPResultStatus = new BatchPayloadAMQPResult<Boolean>();
+        batchCreateAMQPResultStatus.setPayload("processor");
+        try {
+            List<CSVLineObject> csvLineObjectList = CSVProcessor.csvHandlerWeichat(batchCreateAMQPResultMessage.getData()
+                    , batchCreateAMQPResultMessage.getUserId());
+            batchCreateAMQPResultToDataBase.setId(batchUniqueId);
+            batchCreateAMQPResultToDataBase.setUserId(batchCreateAMQPResultMessage.getUserId());
+            batchCreateAMQPResultToDataBase.setData(csvLineObjectList);
+            rabbitTemplate.convertAndSend("zxr.health.batch.create", "", batchCreateAMQPResultToDataBase);
+            batchCreateAMQPResultStatus.setId(batchUniqueId);
+            batchCreateAMQPResultStatus.setData(true);
+        } catch (Exception exception) {
+            ErrorLogger.Log(AMQPListener.class, exception.getMessage());
+            batchCreateAMQPResultStatus.setId(batchUniqueId);
+            batchCreateAMQPResultStatus.setData(false);
+        } finally {
+            rabbitTemplate.convertAndSend("zxr.health.batch.create.status", "", batchCreateAMQPResultStatus);
+        }
+    }
+
     @RabbitListener(queues = "zxr.health")
-    public void listenerSimpleQueue(BatchCreateAMQPResult<String> batchCreateAMQPResultMessage) {
+    public void listenerSimpleQueueAli(BatchCreateAMQPResult<String> batchCreateAMQPResultMessage) {
         String batchUniqueId = batchCreateAMQPResultMessage.getId();
         BatchCreateAMQPResult<List<CSVLineObject>> batchCreateAMQPResultToDataBase = new BatchCreateAMQPResult<>();
         BatchPayloadAMQPResult<Boolean> batchCreateAMQPResultStatus = new BatchPayloadAMQPResult<Boolean>();
@@ -28,6 +52,7 @@ public class AMQPListener {
             List<CSVLineObject> csvLineObjectList = CSVProcessor.csvHandlerAli(batchCreateAMQPResultMessage.getData()
                     , batchCreateAMQPResultMessage.getUserId());
             batchCreateAMQPResultToDataBase.setId(batchUniqueId);
+            batchCreateAMQPResultToDataBase.setUserId(batchCreateAMQPResultMessage.getUserId());
             batchCreateAMQPResultToDataBase.setData(csvLineObjectList);
             rabbitTemplate.convertAndSend("zxr.health.batch.create", "", batchCreateAMQPResultToDataBase);
             batchCreateAMQPResultStatus.setId(batchUniqueId);

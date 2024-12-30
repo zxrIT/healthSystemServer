@@ -4,6 +4,7 @@ import com.ZengXiangRui.BookKeepingProvider.entity.BookKeepingBill;
 import com.ZengXiangRui.BookKeepingProvider.mapper.BookKeepingBillMapper;
 import com.ZengXiangRui.BookKeepingProvider.service.BookKeepingBatchService;
 import com.ZengXiangRui.Common.Utils.ErrorLogger;
+import com.ZengXiangRui.Common.Utils.UserContext;
 import com.ZengXiangRui.Common.annotation.LoggerAnnotation;
 import com.baomidou.dynamic.datasource.annotation.DS;
 import com.baomidou.dynamic.datasource.annotation.DSTransactional;
@@ -34,10 +35,10 @@ public class BookKeepingBatchServiceImpl extends ServiceImpl<BookKeepingBillMapp
     @DS("master")
     @LoggerAnnotation(operation = "批量新增", dataSource = "master")
     @DSTransactional
-    public Boolean batchCreate(List<BookKeepingBill> bookKeepingBills) {
+    public Boolean batchCreate(List<BookKeepingBill> bookKeepingBills, String userId) {
         try {
             this.saveOrUpdateBatch(bookKeepingBills, batch);
-            Set<String> keys = stringRedisTemplate.keys("book:keeping:*");
+            Set<String> keys = stringRedisTemplate.keys("book:keeping:user" + userId + ":*");
             stringRedisTemplate.delete(keys);
         } catch (Exception exception) {
             ErrorLogger.Log(this.getClass(), exception.getMessage());

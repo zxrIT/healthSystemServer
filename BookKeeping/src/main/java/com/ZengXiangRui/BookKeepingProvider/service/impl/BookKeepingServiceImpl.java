@@ -43,7 +43,7 @@ public class BookKeepingServiceImpl extends ServiceImpl<BookKeepingBillMapper, B
     @DS("from")
     @LoggerAnnotation(operation = "查询账单信息", dataSource = "from")
     public String getBookKeeping(int page, int quantity) throws DataBaseException, RequestParametersException {
-        String redisCachingKey = "book:keeping:page" + page + ":quantity" + quantity;
+        String redisCachingKey = "book:keeping:user" + UserContext.getUserId() + ":page" + page + ":quantity" + quantity;
         if (page < 1 || quantity < 1) {
             throw new RequestParametersException("参数规格不正确");
         }
@@ -83,7 +83,7 @@ public class BookKeepingServiceImpl extends ServiceImpl<BookKeepingBillMapper, B
             throw new RequestParametersException("参数规格不正确");
         }
         try {
-            String id = Encryption.encryptToMd5(bookKeepingDisplayBill.getTradeOrderNumber());
+            String id = Encryption.encryptToMd5(bookKeepingDisplayBill.getTradeOrderNumber()) + Encryption.encryptToMd5(UserContext.getUserId());
             BookKeepingBill bookKeepingBill = new BookKeepingBill();
             bookKeepingBill.setId(id);
             bookKeepingBill.setTradeOrderNumber(bookKeepingDisplayBill.getTradeOrderNumber());
@@ -99,7 +99,7 @@ public class BookKeepingServiceImpl extends ServiceImpl<BookKeepingBillMapper, B
             bookKeepingBill.setTransactionStatus(bookKeepingDisplayBill.getTransactionStatus());
             bookKeepingBill.setUserId(UserContext.getUserId());
             bookKeepingBillMapper.insert(bookKeepingBill);
-            Set<String> keys = stringRedisTemplate.keys("book:keeping:*");
+            Set<String> keys = stringRedisTemplate.keys("book:keeping:user:" + UserContext.getUserId() + ":*");
             stringRedisTemplate.delete(keys);
         } catch (Exception exception) {
             throw new DataBaseException(exception.getMessage());
@@ -123,7 +123,7 @@ public class BookKeepingServiceImpl extends ServiceImpl<BookKeepingBillMapper, B
                     new LambdaQueryWrapper<BookKeepingBill>().eq(
                             BookKeepingBill::getId, bookKeepingDisplayBill.getId())
             );
-            Set<String> keys = stringRedisTemplate.keys("book:keeping:*");
+            Set<String> keys = stringRedisTemplate.keys("book:keeping:user" + UserContext.getUserId() + ":*");
             stringRedisTemplate.delete(keys);
         } catch (Exception exception) {
             throw new DataBaseException(exception.getMessage());
@@ -148,7 +148,7 @@ public class BookKeepingServiceImpl extends ServiceImpl<BookKeepingBillMapper, B
         bookKeepingBillMapper.delete(new LambdaQueryWrapper<BookKeepingBill>().eq(
                 BookKeepingBill::getId, bookKeepingBillDataBase.getId()
         ));
-        Set<String> keys = stringRedisTemplate.keys("book:keeping:*");
+        Set<String> keys = stringRedisTemplate.keys("book:keeping:user" + UserContext.getUserId() + ":*");
         stringRedisTemplate.delete(keys);
         return JsonSerialization.toJson(new BookKeepingBillsResponse<String>(
                 BaseResponseUtil.SUCCESS_CODE, BaseResponseUtil.SUCCESS_MESSAGE, "删除成功"

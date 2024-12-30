@@ -14,4 +14,6 @@ public class User {
     private String email;
     @TableField("identityCard")
     private String identityCard;
+    @TableField("imageUrl")
+    private String imageUrl;
 }

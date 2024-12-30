@@ -1,10 +1,8 @@
-package com.ZengXiangRui.webSocket;
+package com.ZengXiangRui.webSocket.server;
 
 import com.ZengXiangRui.Common.Entity.AMQP.BatchPayloadAMQPResult;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import javax.websocket.*;
@@ -15,7 +13,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @Component
 @ServerEndpoint("/upload/csv/status")
 @Slf4j
-public class WebSocketServerEndPoint {
+public class WebSocketServerUploadCsvEndPoint {
     static Map<String, Session> sessions = new ConcurrentHashMap<>();
     static Map<String, Boolean> processorMap = new ConcurrentHashMap<>();
     static Map<String, Boolean> batchCreateMap = new ConcurrentHashMap<>();
@@ -31,8 +29,6 @@ public class WebSocketServerEndPoint {
 
     @OnMessage
     public void onMessage(String message, Session session) {
-        System.out.println(message);
-        System.out.println(message);
         if (!sessions.containsKey(message)) {
             sessions.put(message, session);
         }

@@ -12,11 +12,19 @@ public class UploadController {
     @Autowired
     private UploadService uploadService;
 
-    @PostMapping("/csv/{username}/{userid}/{notesOnBills}")
-    public String uploadCsv(@RequestParam("file") MultipartFile uploadFile,
-                            @PathVariable String username,
-                            @PathVariable String userid,
-                            @PathVariable String notesOnBills) {
-        return uploadService.uploadCsv(uploadFile, username, userid, notesOnBills);
+    @PostMapping("/csv/ali/{username}/{userid}/{notesOnBills}")
+    public String uploadCsvAli(@RequestParam("file") MultipartFile uploadFile,
+                               @PathVariable String username,
+                               @PathVariable String userid,
+                               @PathVariable String notesOnBills) {
+        return uploadService.uploadCsvAli(uploadFile, username, userid, notesOnBills);
+    }
+
+    @PostMapping("/csv/weichat/{username}/{userid}/{notesOnBills}")
+    public String uploadCsvWeiChat(@RequestParam("file") MultipartFile uploadFile,
+                                   @PathVariable String username,
+                                   @PathVariable String userid,
+                                   @PathVariable String notesOnBills) {
+        return uploadService.uploadCsvWeichat(uploadFile, username, userid, notesOnBills);
     }
 }

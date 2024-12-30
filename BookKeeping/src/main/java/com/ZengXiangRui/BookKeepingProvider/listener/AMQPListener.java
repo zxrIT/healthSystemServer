@@ -25,7 +25,7 @@ public class AMQPListener {
     @RabbitListener(queues = "batch.create")
     public void listenerSimpleQueue(BatchCreateAMQPResult<List<BookKeepingBill>> batchCreateAMQPResultMessage) {
         String batchUniqueId = batchCreateAMQPResultMessage.getId();
-        Boolean batchCreateStatus = bookKeepingBatchService.batchCreate(batchCreateAMQPResultMessage.getData());
+        Boolean batchCreateStatus = bookKeepingBatchService.batchCreate(batchCreateAMQPResultMessage.getData(), batchCreateAMQPResultMessage.getUserId());
         BatchPayloadAMQPResult<Boolean> batchCreateAMQPResult = new BatchPayloadAMQPResult<>();
         batchCreateAMQPResult.setPayload("batchCreate");
         batchCreateAMQPResult.setId(batchUniqueId);

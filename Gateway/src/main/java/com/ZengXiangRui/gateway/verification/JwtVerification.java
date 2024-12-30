@@ -5,7 +5,6 @@ import com.ZengXiangRui.gateway.entity.TokenUserInformation;
 import io.jsonwebtoken.Jwt;
 import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 
@@ -20,8 +19,7 @@ public class JwtVerification {
         this.stringRedisTemplate = stringRedisTemplate;
     }
 
-    @Value("{token.securitySecretKey}")
-    private String SecretKey;
+    private String SecretKey = "zxr-health";
 
     public String parseJwt(String token) {
         Jwt jwt;

@@ -2,15 +2,13 @@ package com.ZengXiangRui.authentication.security;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
 
 @Component
 public class TokenManager {
-    @Value("{token.securitySecretKey}")
-    private String SecretKey;
+    private String SecretKey = "zxr-health";
 
     public String createToken(String id, String username) {
         long expirationTime = 1000 * 60 * 60 * 24;
