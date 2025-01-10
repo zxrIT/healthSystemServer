@@ -2,9 +2,7 @@ package com.ZengXiangRui.authentication.service.impl;
 
 import com.ZengXiangRui.Common.Entity.AMQP.WechatLogin;
 import com.ZengXiangRui.Common.Entity.AMQP.WechatScan;
-import com.ZengXiangRui.Common.Response.BaseResponseUtil;
 import com.ZengXiangRui.Common.Utils.Encryption;
-import com.ZengXiangRui.Common.Utils.JsonSerialization;
 import com.ZengXiangRui.Common.Utils.JsonUtil;
 import com.ZengXiangRui.Common.annotation.LoggerAnnotation;
 import com.ZengXiangRui.Common.exception.util.WechatLoginException;
@@ -13,7 +11,6 @@ import com.ZengXiangRui.authentication.entity.User;
 import com.ZengXiangRui.authentication.entity.WeChatUser;
 import com.ZengXiangRui.authentication.entity.WechatTokenInfo;
 import com.ZengXiangRui.authentication.mapper.UserMapper;
-import com.ZengXiangRui.authentication.response.WechatLoginResponse;
 import com.ZengXiangRui.authentication.response.entity.WechatLoginSuccessUserEntity;
 import com.ZengXiangRui.authentication.security.TokenManager;
 import com.ZengXiangRui.authentication.service.WechatService;

@@ -3,29 +3,23 @@ package com.ZengXiangRui.authentication.controller;
 import cn.hutool.extra.qrcode.QrCodeUtil;
 import com.ZengXiangRui.authentication.service.WechatService;
 import com.ZengXiangRui.authentication.utils.WechatAttributes;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 
 @RestController
 @RequestMapping("/authentication/wechat")
 public class WechatLoginController {
-
-    private static final Logger log = LogManager.getLogger(WechatLoginController.class);
-    private final String rediretUrl = URLEncoder.encode(
-            "http://6d38f128.r11.cpolar.top/authentication/wechat/login/callback", "UTF-8");
+    private final String redirectUrl = URLEncoder.encode(
+            "http://1c2def93.r11.cpolar.top/authentication/wechat/login/callback", StandardCharsets.UTF_8);
     private final WechatService wechatService;
 
     @Autowired
-    public WechatLoginController(WechatService wechatService) throws UnsupportedEncodingException {
+    public WechatLoginController(WechatService wechatService){
         this.wechatService = wechatService;
     }
 
@@ -41,7 +35,7 @@ public class WechatLoginController {
     @ResponseBody
     public void wechatLogin(@PathVariable String loginId, HttpServletResponse response) throws IOException {
         String dimensionalUrl = "https://open.weixin.qq.com/connect/oauth2/authorize" +
-                "?appid=" + WechatAttributes.appid + "&redirect_uri=" + rediretUrl + "&response_type=code&" +
+                "?appid=" + WechatAttributes.appid + "&redirect_uri=" + redirectUrl + "&response_type=code&" +
                 "scope=" + WechatAttributes.scope + "&state=" + loginId + "#wechat_redirect";
         response.setContentType("image/png");
         QrCodeUtil.generate(dimensionalUrl, 200, 200, "png", response.getOutputStream());
