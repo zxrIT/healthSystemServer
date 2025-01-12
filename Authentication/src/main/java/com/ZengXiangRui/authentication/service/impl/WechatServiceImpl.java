@@ -63,7 +63,7 @@ public class WechatServiceImpl extends ServiceImpl<UserMapper, User> implements 
     }
 
     @Override
-    @Transactional()
+    @Transactional
     @LoggerAnnotation(operation = "用户微信登录", dataSource = "localhost")
     public String wechatLogin(String code, String state) throws WechatLoginException {
         rabbitTemplate.convertAndSend("zxr.health.wechat.scan.queue", new WechatScan(state, true));
@@ -107,6 +107,7 @@ public class WechatServiceImpl extends ServiceImpl<UserMapper, User> implements 
                 wechatLoginSuccessUserEntity.setId(user.getId());
                 wechatLoginSuccessUserEntity.setIdentityCard(user.getIdentityCard());
                 wechatLoginSuccessUserEntity.setImageUrl(user.getImageUrl());
+                wechatLoginSuccessUserEntity.setEmail(user.getEmail());
             } else {
                 String userToken = tokenManager.createToken(databasesUser.getId(), databasesUser.getUsername());
                 String redisKey = "token:" + databasesUser.getId();
@@ -117,6 +118,7 @@ public class WechatServiceImpl extends ServiceImpl<UserMapper, User> implements 
                 wechatLoginSuccessUserEntity.setMobile(databasesUser.getMobile());
                 wechatLoginSuccessUserEntity.setIdentityCard(databasesUser.getIdentityCard());
                 wechatLoginSuccessUserEntity.setImageUrl(databasesUser.getImageUrl());
+                wechatLoginSuccessUserEntity.setEmail(databasesUser.getEmail());
             }
         } catch (Exception exception) {
             throw new WechatLoginException(exception.getMessage());

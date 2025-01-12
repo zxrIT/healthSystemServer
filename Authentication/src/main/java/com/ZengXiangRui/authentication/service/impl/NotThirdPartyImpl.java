@@ -67,6 +67,7 @@ public class NotThirdPartyImpl extends ServiceImpl<UserMapper, User> implements 
             passwordLoginSuccessUserEntity.setMobile(user.getMobile());
             passwordLoginSuccessUserEntity.setIdentityCard(user.getIdentityCard());
             passwordLoginSuccessUserEntity.setImageUrl(user.getImageUrl());
+            passwordLoginSuccessUserEntity.setEmail(user.getEmail());
         } catch (Exception exception) {
             throw new ForbiddenException(exception.getMessage());
         }

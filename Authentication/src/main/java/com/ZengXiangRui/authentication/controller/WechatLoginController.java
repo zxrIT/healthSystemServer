@@ -1,8 +1,10 @@
 package com.ZengXiangRui.authentication.controller;
 
 import cn.hutool.extra.qrcode.QrCodeUtil;
+import cn.hutool.extra.qrcode.QrConfig;
 import com.ZengXiangRui.authentication.service.WechatService;
 import com.ZengXiangRui.authentication.utils.WechatAttributes;
+import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,11 +17,11 @@ import java.nio.charset.StandardCharsets;
 @RequestMapping("/authentication/wechat")
 public class WechatLoginController {
     private final String redirectUrl = URLEncoder.encode(
-            "http://1c2def93.r11.cpolar.top/authentication/wechat/login/callback", StandardCharsets.UTF_8);
+            "http://24c78abe.r11.cpolar.top/authentication/wechat/login/callback", StandardCharsets.UTF_8);
     private final WechatService wechatService;
 
     @Autowired
-    public WechatLoginController(WechatService wechatService){
+    public WechatLoginController(WechatService wechatService) {
         this.wechatService = wechatService;
     }
 
@@ -38,7 +40,9 @@ public class WechatLoginController {
                 "?appid=" + WechatAttributes.appid + "&redirect_uri=" + redirectUrl + "&response_type=code&" +
                 "scope=" + WechatAttributes.scope + "&state=" + loginId + "#wechat_redirect";
         response.setContentType("image/png");
-        QrCodeUtil.generate(dimensionalUrl, 200, 200, "png", response.getOutputStream());
+        QrConfig qrConfig = new QrConfig(200, 200);
+        qrConfig.setErrorCorrection(ErrorCorrectionLevel.H);
+        QrCodeUtil.generate(dimensionalUrl, qrConfig, "png", response.getOutputStream());
     }
 
     @GetMapping("/login/callback")
