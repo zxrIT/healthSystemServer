@@ -16,6 +16,7 @@
         <module>ProcessingBillCSV</module>
         <module>WebSocket</module>
         <module>Authentication</module>
+        <module>TodoList</module>
     </modules>
 
     <properties>

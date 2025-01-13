@@ -34,6 +34,10 @@ spring:
           uri: lb://AuthenticationProvider
           predicates:
             - Path=/authentication/**
+        - id: TodoListProvider
+          uri: lb://TodoListProvider
+          predicates:
+            - Path=/todo/**
 health:
   auth:
     excludePaths:

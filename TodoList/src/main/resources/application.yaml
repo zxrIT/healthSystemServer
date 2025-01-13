@@ -1,0 +1,18 @@
+server:
+  port: 8050
+spring:
+  mail:
+    username: healthSystem@126.com
+    host: smtp.126.com
+    password: FTsBRZZ977AM7ef7
+  datasource:
+    username: root
+    password: "root1234"
+    url: jdbc:mysql://127.0.0.1:3306/health?characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  application:
+    name: TodoListProvider
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
