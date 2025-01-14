@@ -17,6 +17,7 @@
         <module>WebSocket</module>
         <module>Authentication</module>
         <module>TodoList</module>
+        <module>Elasticsearch</module>
     </modules>
 
     <properties>

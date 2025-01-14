@@ -38,6 +38,10 @@ spring:
           uri: lb://TodoListProvider
           predicates:
             - Path=/todo/**
+        - id: ElasticsearchProvider
+          uri: lb://ElasticsearchProvider
+          predicates:
+            - Path=/elasticsearch/**
 health:
   auth:
     excludePaths:
