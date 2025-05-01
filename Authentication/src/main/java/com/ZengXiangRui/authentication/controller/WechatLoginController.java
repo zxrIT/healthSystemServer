@@ -17,7 +17,7 @@ import java.nio.charset.StandardCharsets;
 @RequestMapping("/authentication/wechat")
 public class WechatLoginController {
     private final String redirectUrl = URLEncoder.encode(
-            "http://24c78abe.r11.cpolar.top/authentication/wechat/login/callback", StandardCharsets.UTF_8);
+            "http://185cb204.r11.cpolar.top/authentication/wechat/login/callback", StandardCharsets.UTF_8);
     private final WechatService wechatService;
 
     @Autowired

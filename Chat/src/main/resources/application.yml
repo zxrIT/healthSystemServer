@@ -1,0 +1,28 @@
+server:
+  port: 8070
+spring:
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      database: HealthSystem
+      authentication-database: admin
+      username: root
+      password: root1234
+  application:
+    name: ChatProvider
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
+  ai:
+    openai:
+      api-key: sk-f9c1167e751e4649a0c2d7f1b17299e5
+      base-url: https://api.deepseek.com
+      chat:
+        options:
+          model: deepseek-chat
+logging:
+  level:
+    org.springframework.ai: debug
+    com.ZengXiangRui.Chat: debug
