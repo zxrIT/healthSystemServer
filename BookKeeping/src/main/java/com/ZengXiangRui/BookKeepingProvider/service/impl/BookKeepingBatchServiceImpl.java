@@ -4,6 +4,7 @@ import com.ZengXiangRui.BookKeepingProvider.entity.BookKeepingBill;
 import com.ZengXiangRui.BookKeepingProvider.mapper.BookKeepingBillMapper;
 import com.ZengXiangRui.BookKeepingProvider.redis.RedisIdWorker;
 import com.ZengXiangRui.BookKeepingProvider.service.BookKeepingBatchService;
+import com.ZengXiangRui.Common.Entity.AMQP.ComputedAMQPParam;
 import com.ZengXiangRui.Common.Entity.AMQP.ElasticsearchAMQPParam;
 import com.ZengXiangRui.Common.Utils.ErrorLogger;
 import com.ZengXiangRui.Common.Utils.UserContext;
@@ -54,6 +55,8 @@ public class BookKeepingBatchServiceImpl extends ServiceImpl<BookKeepingBillMapp
             rabbitTemplate.convertAndSend("zxr.healthExchange.elasticsearch", "batch",
                     new ElasticsearchAMQPParam<List<BookKeepingBill>>("create", redisIdWorker.nextId(globallyUniqueRedisKey),
                             bookKeepingBills));
+            rabbitTemplate.convertAndSend("zxr.health.other", "money",
+                    new ComputedAMQPParam(redisIdWorker.nextId(globallyUniqueRedisKey), userId));
             Set<String> keys = stringRedisTemplate.keys("book:keeping:user" + userId + ":*");
             stringRedisTemplate.delete(keys);
         } catch (Exception exception) {

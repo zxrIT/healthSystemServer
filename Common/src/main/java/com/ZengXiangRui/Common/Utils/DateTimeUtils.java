@@ -1,4 +1,4 @@
-package com.ZengXiangRui.Elasticsearch.util;
+package com.ZengXiangRui.Common.Utils;
 
 import java.text.SimpleDateFormat;
 import java.time.*;

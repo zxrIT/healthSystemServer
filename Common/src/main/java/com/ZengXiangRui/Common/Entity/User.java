@@ -16,4 +16,5 @@ public class User {
     private String identityCard;
     @TableField("imageUrl")
     private String imageUrl;
+    private double salary;
 }

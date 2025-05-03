@@ -46,6 +46,10 @@ spring:
           uri: lb://ChatProvider
           predicates:
             - Path=/ai/chat/**
+        - id: ComputedProvider
+          uri: lb://ComputedProvider
+          predicates:
+            - Path=/computed/**
 health:
   auth:
     excludePaths:

@@ -1,0 +1,35 @@
+server:
+  port: 8080
+spring:
+  rabbitmq:
+    host: 127.0.0.1
+    port: 5672
+    username: guest
+    password: guest
+    virtual-host: /
+  datasource:
+    dynamic:
+      primary: master
+      strict: false
+      datasource:
+        master:
+          username: root
+          password: "root1234"
+          url: jdbc:mysql://127.0.0.1:3306/health?characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
+          driver-class-name: com.mysql.cj.jdbc.Driver
+        from_1:
+          username: zxr
+          password: "Root1234!"
+          url: jdbc:mysql://192.168.202.137/health?characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
+          driver-class-name: com.mysql.cj.jdbc.Driver
+        from_2:
+          username: zxr
+          password: "root1234"
+          url: jdbc:mysql://192.168.202.138/health?characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
+          driver-class-name: com.mysql.cj.jdbc.Driver
+  application:
+    name: ComputedProvider
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848

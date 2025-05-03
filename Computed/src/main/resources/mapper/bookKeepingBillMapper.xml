@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ZengXiangRui.Computed.mapper.BillMapper">
+    <select id="selectTotalAmountByUserId" resultType="java.lang.Double">
+        SELECT IFNULL(SUM(amountOfTransaction), 0.0)
+        FROM bookKeepingBill
+        WHERE userId = #{userId}
+    </select>
+
+    <select id="calculateBillMonthsSpan" resultType="java.lang.Integer">
+        SELECT
+            IFNULL(
+                    TIMESTAMPDIFF(
+                        MONTH,
+                            (SELECT MIN(tradingHours) FROM bookKeepingBill WHERE userId = #{userId}),
+                            (SELECT MAX(tradingHours) FROM bookKeepingBill WHERE userId = #{userId})
+                    ),
+                    0
+            )
+        FROM dual
+        WHERE EXISTS (SELECT 1 FROM bookKeepingBill WHERE userId = #{userId} HAVING COUNT(id) >= 2)
+        UNION ALL
+        SELECT 0
+            WHERE NOT EXISTS (SELECT 1 FROM bookKeepingBill WHERE userId = #{userId} HAVING COUNT(id) >= 2)
+                LIMIT 1
+    </select>
+</mapper>

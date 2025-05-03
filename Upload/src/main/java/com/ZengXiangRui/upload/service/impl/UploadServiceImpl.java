@@ -1,7 +1,9 @@
 package com.ZengXiangRui.upload.service.impl;
 
 import com.ZengXiangRui.Common.Entity.AMQP.BatchCreateAMQPResult;
+import com.ZengXiangRui.Common.Entity.AMQP.ComputedAMQTimeParam;
 import com.ZengXiangRui.Common.Response.BaseResponseUtil;
+import com.ZengXiangRui.Common.Utils.DateTimeUtils;
 import com.ZengXiangRui.Common.Utils.ErrorLogger;
 import com.ZengXiangRui.Common.Utils.JsonSerialization;
 import com.ZengXiangRui.Common.Utils.UserContext;
@@ -18,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.security.SecureRandom;
 import java.util.UUID;
 
 @Service
@@ -44,6 +47,10 @@ public class UploadServiceImpl implements UploadService {
             batchCreateAMQPResult.setUserId(UserContext.getUserId());
             batchCreateAMQPResult.setData("/Users/zengxiangrui/HealthSystem/static/csv/ali/" + fileName);
             rabbitTemplate.convertAndSend("zxr.HealthExchange.ali.csv", "", batchCreateAMQPResult);
+            rabbitTemplate.convertAndSend("zxr.health.other", "time", new ComputedAMQTimeParam(
+                    SecureRandom.getInstanceStrong().nextLong(),
+                    UserContext.getUserId(), DateTimeUtils.getCurrentDateTime(), "ali"
+            ));
         } catch (Exception exception) {
             File file = new File("/Users/zengxiangrui/HealthSystem/static/csv/ali/" + fileName);
             if (file.exists()) {
@@ -76,6 +83,10 @@ public class UploadServiceImpl implements UploadService {
             batchCreateAMQPResult.setUserId(UserContext.getUserId());
             batchCreateAMQPResult.setData("/Users/zengxiangrui/HealthSystem/static/csv/weichat/" + fileName);
             rabbitTemplate.convertAndSend("zxr.HealthExchange.weichat.csv", "", batchCreateAMQPResult);
+            rabbitTemplate.convertAndSend("zxr.health.other", "time", new ComputedAMQTimeParam(
+                    SecureRandom.getInstanceStrong().nextLong(),
+                    UserContext.getUserId(), DateTimeUtils.getCurrentDateTime(), "weichat"
+            ));
         } catch (Exception exception) {
             File file = new File("/Users/zengxiangrui/HealthSystem/static/csv/weichat/" + fileName);
             if (file.exists()) {

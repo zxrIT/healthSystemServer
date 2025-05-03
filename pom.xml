@@ -18,6 +18,7 @@
         <module>Authentication</module>
         <module>TodoList</module>
         <module>Elasticsearch</module>
+        <module>Computed</module>
     </modules>
 
     <properties>
