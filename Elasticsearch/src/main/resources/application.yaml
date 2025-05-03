@@ -1,35 +1,19 @@
 server:
   port: 8600
 spring:
+  data:
+    elasticsearch:
+      repositories:
+        enabled: true
+  elasticsearch:
+    rest:
+      uris: http://localhost:19200
   rabbitmq:
     host: 127.0.0.1
     port: 5672
     username: guest
     password: guest
     virtual-host: /
-  datasource:
-    dynamic:
-      primary: from_1
-      strict: false
-      datasource:
-        from_1:
-          username: zxr
-          password: "Root1234!"
-          initial-size: 1
-          min-idle: 1
-          max-active: 20
-          test-on-borrow: true
-          url: jdbc:mysql://192.168.202.137/health?characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
-          driver-class-name: com.mysql.cj.jdbc.Driver
-        from_2:
-          username: zxr
-          password: "root1234"
-          initial-size: 1
-          min-idle: 1
-          max-active: 20
-          test-on-borrow: true
-          url: jdbc:mysql://192.168.202.138/health?characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
-          driver-class-name: com.mysql.cj.jdbc.Driver
   application:
     name: ElasticsearchProvider
   cloud:

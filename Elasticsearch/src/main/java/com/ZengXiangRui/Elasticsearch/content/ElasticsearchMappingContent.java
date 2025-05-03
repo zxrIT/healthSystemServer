@@ -42,7 +42,7 @@ public class ElasticsearchMappingContent {
             "      },\n" +
             "      \"tradingHours\":{\n" +
             "        \"type\": \"date\",\n" +
-            "        \"format\": \"MMM d, yyyy, HH:mm:ss a||MMM d, yyyy, hh:mm:ss a||MMM dd, yyyy, HH:mm:ss a||MMM dd, yyyy, hh:mm:ss a||epoch_millis||strict_date_optional_time||yyyy-MM-dd HH:mm:ss\"\n" +
+            "        \"format\": \"yyyy-MM-dd HH:mm:ss\"\n" +
             "      },\n" +
             "      \"userId\":{\n" +
             "        \"type\": \"keyword\"\n" +

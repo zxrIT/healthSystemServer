@@ -40,4 +40,9 @@ public class AMQPConfiguration {
     public Binding fanoutBindingProcessor() {
         return BindingBuilder.bind(fanoutQueueProcessor()).to(fanoutExchange());
     }
+
+    @Bean
+    public MessageConverter jsonMessageConverter() {
+        return new Jackson2JsonMessageConverter();
+    }
 }

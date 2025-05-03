@@ -19,6 +19,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value = Exception.class)
     @ResponseBody
     public String exceptionHandler(Exception exception) {
+        exception.printStackTrace();
         if (exception instanceof RequestParametersException) {
             return JsonSerialization.toJson(new BaseResponse<>(
                     BaseResponseUtil.CLIENT_ERROR_CODE, BaseResponseUtil.CLIENT_ERROR_MESSAGE,
@@ -30,10 +31,10 @@ public class GlobalExceptionHandler {
                     new UploadResponseData("", "上传文件失败请稍后重试")
             ));
         }
-        logger.error("==============log start =============");
-        logger.error("exception type: {}", exception.getClass().getName());
-        logger.error("exception message: {}", exception.getMessage());
-        logger.error("==============log end =============");
+//        logger.error("==============log start =============");
+////        logger.error("exception type: {}", exception.getClass().getName());
+////        logger.error("exception message: {}", exception.getMessage());
+//        logger.error("==============log end =============");
         return JsonSerialization.toJson(new BaseResponse<>(
                 BaseResponseUtil.SERVER_ERROR_CODE, BaseResponseUtil.SERVER_ERROR_MESSAGE,
                 "服务器去了火星！！！请稍后重试"

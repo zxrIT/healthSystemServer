@@ -2,8 +2,10 @@ package com.ZengXiangRui.BookKeepingProvider.service.impl;
 
 import com.ZengXiangRui.BookKeepingProvider.entity.BookKeepingBill;
 import com.ZengXiangRui.BookKeepingProvider.mapper.BookKeepingBillMapper;
+import com.ZengXiangRui.BookKeepingProvider.redis.RedisIdWorker;
 import com.ZengXiangRui.BookKeepingProvider.response.BookKeepingBillsResponse;
 import com.ZengXiangRui.BookKeepingProvider.service.BookKeepingService;
+import com.ZengXiangRui.Common.Entity.AMQP.ElasticsearchAMQPParam;
 import com.ZengXiangRui.Common.Response.BaseResponseUtil;
 import com.ZengXiangRui.Common.Utils.*;
 import com.ZengXiangRui.Common.annotation.LoggerAnnotation;
@@ -30,8 +32,13 @@ import java.util.concurrent.TimeUnit;
 public class BookKeepingServiceImpl extends ServiceImpl<BookKeepingBillMapper, BookKeepingBill>
         implements BookKeepingService {
 
+    private final String globallyUniqueRedisKey = "bookKeeping:globally:Unique:redis:key";
+
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
+
+    @Autowired
+    private RedisIdWorker redisIdWorker;
 
     @Autowired
     private RabbitTemplate rabbitTemplate;
@@ -99,6 +106,9 @@ public class BookKeepingServiceImpl extends ServiceImpl<BookKeepingBillMapper, B
             bookKeepingBill.setTransactionStatus(bookKeepingDisplayBill.getTransactionStatus());
             bookKeepingBill.setUserId(UserContext.getUserId());
             bookKeepingBillMapper.insert(bookKeepingBill);
+            rabbitTemplate.convertAndSend("zxr.healthExchange.elasticsearch", "single",
+                    new ElasticsearchAMQPParam<BookKeepingBill>("create", redisIdWorker.nextId(globallyUniqueRedisKey),
+                            bookKeepingBill));
             Set<String> keys = stringRedisTemplate.keys("book:keeping:user:" + UserContext.getUserId() + ":*");
             stringRedisTemplate.delete(keys);
         } catch (Exception exception) {
@@ -123,6 +133,10 @@ public class BookKeepingServiceImpl extends ServiceImpl<BookKeepingBillMapper, B
                     new LambdaQueryWrapper<BookKeepingBill>().eq(
                             BookKeepingBill::getId, bookKeepingDisplayBill.getId())
             );
+            rabbitTemplate.convertAndSend("zxr.healthExchange.elasticsearch", "single",
+                    new ElasticsearchAMQPParam<BookKeepingBill>(
+                            "update",
+                            redisIdWorker.nextId(globallyUniqueRedisKey), bookKeepingDisplayBill));
             Set<String> keys = stringRedisTemplate.keys("book:keeping:user" + UserContext.getUserId() + ":*");
             stringRedisTemplate.delete(keys);
         } catch (Exception exception) {
@@ -148,6 +162,9 @@ public class BookKeepingServiceImpl extends ServiceImpl<BookKeepingBillMapper, B
         bookKeepingBillMapper.delete(new LambdaQueryWrapper<BookKeepingBill>().eq(
                 BookKeepingBill::getId, bookKeepingBillDataBase.getId()
         ));
+        rabbitTemplate.convertAndSend("zxr.healthExchange.elasticsearch", "single",
+                new ElasticsearchAMQPParam<BookKeepingBill>("delete", redisIdWorker.nextId(globallyUniqueRedisKey),
+                        bookKeepingBillDataBase));
         Set<String> keys = stringRedisTemplate.keys("book:keeping:user" + UserContext.getUserId() + ":*");
         stringRedisTemplate.delete(keys);
         return JsonSerialization.toJson(new BookKeepingBillsResponse<String>(
