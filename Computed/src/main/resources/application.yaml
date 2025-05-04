@@ -1,6 +1,10 @@
 server:
   port: 8080
 spring:
+  mail:
+    username: healthSystem@126.com
+    host: smtp.126.com
+    password: FTsBRZZ977AM7ef7
   rabbitmq:
     host: 127.0.0.1
     port: 5672

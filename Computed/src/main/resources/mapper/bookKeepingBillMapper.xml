@@ -24,4 +24,17 @@
             WHERE NOT EXISTS (SELECT 1 FROM bookKeepingBill WHERE userId = #{userId} HAVING COUNT(id) >= 2)
                 LIMIT 1
     </select>
+    <select id="selectDailyConsumptionByDateRange" resultType="com.ZengXiangRui.Computed.entity.DailyConsumptionDTO">
+        SELECT
+            DATE(trade_time) as date,
+            SUM(amount) as totalSpending,
+            COUNT(*) as transactionCount,
+            GROUP_CONCAT(DISTINCT consumption_type) as consumptionTypes
+        FROM bill
+        WHERE user_id = #{userId}
+          AND trade_time BETWEEN #{startDate} AND #{endDate}
+          AND direction_of_trade = 1 
+        GROUP BY DATE(trade_time)
+        ORDER BY date
+    </select>
 </mapper>

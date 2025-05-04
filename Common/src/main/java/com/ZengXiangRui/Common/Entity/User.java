@@ -17,4 +17,7 @@ public class User {
     @TableField("imageUrl")
     private String imageUrl;
     private double salary;
+
+    @TableField("threshold")
+    private int threshold;
 }
